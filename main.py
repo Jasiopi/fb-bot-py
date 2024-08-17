@@ -2,24 +2,40 @@ import time
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.firefox.options import Options
 
 
 w=4
 v="s"+str(w)+"s"
 print(v)
 
-driver = webdriver.Firefox()
+
+
+firefox_options = Options()
+firefox_options.add_argument("--headless")
+
+service = Service('geckodriver.exe')
+
+driver = webdriver.Firefox(service=service, options=firefox_options)
 driver.implicitly_wait(10)
 driver.get("https://www.facebook.com/InOManiak")
+
+print("otwarcie programu")
 
 time.sleep(5)
 
 reg=driver.find_element(By.CSS_SELECTOR,".x8hhl5t > div:nth-child(2) > div:nth-child(1)")
 reg.click()
 
+print("otwarcie przeglaldarki")
+
 log=driver.find_element(By.XPATH,"/html/body/div[1]/div/div[1]/div/div[5]/div/div/div[1]/div/div[2]/div/div/div/div[1]/div")
 log.click()
 a=0
+
+print("wyłaczenie konta")
+
 while a!=7:
     driver.execute_script("window.scrollTo(1,document.body.scrollHeight)")   #scrol down
     a+=1
