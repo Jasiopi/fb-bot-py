@@ -1,5 +1,8 @@
 import time
 
+import tkinter
+from tkinter import ttk
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.service import Service
@@ -17,60 +20,100 @@ firefox_options.add_argument("--headless")
 
 service = Service('geckodriver.exe')
 
-driver = webdriver.Firefox(service=service, options=firefox_options)
-driver.implicitly_wait(10)
-driver.get("https://www.facebook.com/InOManiak")
+i=0
+def bar():
+    global i
+    i+=5
+    proggres['value'] = i
+    root.update_idletasks()
 
-print("otwarcie programu")
+def get_data():
+    global i
+    i = 0
+    driver = webdriver.Firefox(service=service, options=firefox_options)
+    driver.implicitly_wait(10)
+    driver.get("https://www.facebook.com/InOManiak")
+    bar()
 
-time.sleep(5)
+    print("otwarcie programu")
 
-reg=driver.find_element(By.CSS_SELECTOR,".x8hhl5t > div:nth-child(2) > div:nth-child(1)")
-reg.click()
+    time.sleep(5)
+    bar()
 
-print("otwarcie przeglaldarki")
+    reg=driver.find_element(By.CSS_SELECTOR,".x8hhl5t > div:nth-child(2) > div:nth-child(1)")
+    reg.click()
 
-log=driver.find_element(By.XPATH,"/html/body/div[1]/div/div[1]/div/div[5]/div/div/div[1]/div/div[2]/div/div/div/div[1]/div")
-log.click()
-a=0
+    print("otwarcie przeglaldarki")
+    bar()
 
-print("wyłaczenie konta")
+    log=driver.find_element(By.XPATH,"/html/body/div[1]/div/div[1]/div/div[5]/div/div/div[1]/div/div[2]/div/div/div/div[1]/div")
+    log.click()
+    a=0
 
-while a!=7:
-    driver.execute_script("window.scrollTo(1,document.body.scrollHeight)")   #scrol down
-    a+=1
-    print("scroll",str(a))
-    time.sleep(2)
+    print("wyłaczenie konta")
 
-tab=[]
-b=0
+    while a!=7:
+        driver.execute_script("window.scrollTo(1,document.body.scrollHeight)")   #scrol down
+        a+=1
+        print("scroll",str(a))
+        time.sleep(2)
+        bar()
 
-while b!=10:                #pobranie z po xpath
-    b+=1
-    xpath="/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[2]/div/div["+str(b)+"]"  #ścieżka w html facebook czasem się zmienia
-    #print(xpath)
-    date=driver.find_element(By.XPATH,xpath)
-    tab.append(date.text)
-    print("pobrany post",str(b))
+    tab=[]
+    b=0
 
-
-a=0
-
-for x in tab:
-    a+=1
-    print("--------post ",str(a),"----------------------------------------------------")
-    print(x)
-
-driver.quit()
-
-#program właściwie pobiera posty z fb
-#teraz trzeba wyekstaraktować dane z posta i będzie śmiegać
+    while b!=10:                #pobranie z po xpath
+        b+=1
+        xpath="/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[2]/div/div["+str(b)+"]"  #ścieżka w html facebook czasem się zmienia
+        #print(xpath)
+        date=driver.find_element(By.XPATH,xpath)
+        tab.append(date.text)
+        print("pobrany post",str(b))
+        bar()
 
 
-#/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[2]/div/div[1]
-#/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[2]/div/div[2]
-#/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[2]/div/div[3]
-#/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div[2]/div/div[6]
-#/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[2]/div/div[1]
-#/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[2]/div/div[5]
-#piwo
+    a=0
+
+    for x in tab:
+        a+=1
+        print("--------post ",str(a),"----------------------------------------------------")
+        print(x)
+
+    driver.quit()
+
+    #program właściwie pobiera posty z fb
+    #teraz trzeba wyekstaraktować dane z posta i będzie śmiegać
+
+
+    #/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[2]/div/div[1]
+    #/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[2]/div/div[2]
+    #/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[2]/div/div[3]
+    #/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div[2]/div/div[6]
+    #/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[2]/div/div[1]
+    #/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[1]/div[1]/div/div/div[4]/div[2]/div/div[2]/div/div[5]
+    #piwo
+
+
+root =tkinter.Tk()
+root.title("scrapper")
+
+labal=tkinter.Label(root,text="pobieranie postów z fb ze profilu INOmaniak")
+
+enter_button=tkinter.Button(root,text="start",command=get_data)
+
+proggres=ttk.Progressbar(root,orient="horizontal",length=100,mode="determinate")
+
+
+
+labal.pack()
+
+enter_button.pack()
+
+proggres.pack()
+
+root.mainloop()
+
+
+
+
+
